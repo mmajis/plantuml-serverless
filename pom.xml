@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.lambadaframework</groupId>
+    <artifactId>boilerplate</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1</version>
+    <repositories>
+        <repository>
+            <id>lambadaframework</id>
+            <url>http://maven.cagataygurturk.com/releases</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>lambadaframework</id>
+            <url>http://maven.cagataygurturk.com/releases</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <properties>
+        <lambada.version>0.0.1</lambada.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <deployment.bucket>lambada-boilerplate</deployment.bucket>
+        <deployment.package>org.lambadaframework.example</deployment.package>
+        <!-- Region to deploy-->
+        <deployment.region>eu-west-1</deployment.region>
+        <!-- Stage to deploy -->
+        <deployment.stage>production</deployment.stage>
+        <!-- Maximum execution time for lambda -->
+        <deployment.maximumExecutionTime>10</deployment.maximumExecutionTime>
+        <!-- Maximum allowed memory usage for lambda -->
+        <deployment.lambdaMemorySize>1024</deployment.lambdaMemorySize>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.lambadaframework</groupId>
+            <artifactId>lambada-runtime</artifactId>
+            <version>${lambada.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.lambadaframework</groupId>
+                <artifactId>lambada-maven-plugin</artifactId>
+                <version>${lambada.version}</version>
+                <configuration>
+                    <packageName>${deployment.package}</packageName>
+                    <regionToDeploy>${deployment.region}</regionToDeploy>
+                    <stageToDeploy>${deployment.stage}</stageToDeploy>
+
+                    <lambdaMaximumExecutionTime>${deployment.maximumExecutionTime}</lambdaMaximumExecutionTime>
+                    <lambdaMemorySize>${deployment.lambdaMemorySize}</lambdaMemorySize>
+
+                    <lambdaExecutionRolePolicies>
+                        <param>arn:aws:iam::aws:policy/AmazonS3FullAccess</param>
+                    </lambdaExecutionRolePolicies>
+
+                    <!-- Subnet ID for VPC config -->
+                    <lambdaSubnetIds>
+                        <params>subnet-93efeef6</params>
+                        <params>subnet-93efdde6</params>
+                        <params>subnet-93efees2</params>
+                    </lambdaSubnetIds>
+                    <!-- Security groups for VPC Config -->
+                    <lambdaSecurityGroups>
+                        <params>sg-6c231d09</params>
+                        <params>sg-6c251d42</params>
+                    </lambdaSecurityGroups>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare</goal>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+            Maven Shade plugin packages the project to a fat JAR with all required dependencies.
+            With minimum dependencies it should create a 5 MB jar file.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <!-- It is important to NOT to activate minimizeJar option -->
+                    <minimizeJar>false</minimizeJar>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.lambadaframework</groupId>
+                <artifactId>lambada-wagon</artifactId>
+                <version>${lambada.version}</version>
+            </extension>
+        </extensions>
+    </build>
+    <distributionManagement>
+        <repository>
+            <id>aws-releases</id>
+            <name>AWS Release Repository</name>
+            <url>s3://${deployment.bucket}/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>aws-snapshots</id>
+            <name>AWS Snapshot Repository</name>
+            <url>s3://${deployment.bucket}/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
