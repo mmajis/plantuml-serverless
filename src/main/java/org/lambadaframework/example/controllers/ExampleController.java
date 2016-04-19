@@ -1,8 +1,6 @@
 package org.lambadaframework.example.controllers;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.lambadaframework.logger.LambdaLogger;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -10,10 +8,17 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class ExampleController {
 
-    /**
-     * LambdaLogger is a log4j wrapper for proper logging to Cloudwatch
-     */
-    static final Logger logger = LambdaLogger.getLogger(ExampleController.class, Level.DEBUG);
+
+    static final Logger logger = Logger.getLogger(ExampleController.class);
+
+    static class Entity {
+        public int id = 1;
+        public String name;
+
+        public Entity(String name) {
+            this.name = name;
+        }
+    }
 
     @GET
     @Path("/")
@@ -21,7 +26,7 @@ public class ExampleController {
     ) {
         logger.debug("Request got");
         return Response.status(200)
-                .entity("index")
+                .entity(new Entity("John doe"))
                 .build();
     }
 
@@ -32,12 +37,8 @@ public class ExampleController {
     ) {
 
         logger.debug("Request got");
-        /**
-         * You can read properties file using System.getProperty method.
-         */
-        logger.debug(System.getProperty("test"));
         return Response.status(200)
-                .entity(name)
+                .entity(new Entity(name))
                 .build();
     }
 
@@ -49,7 +50,7 @@ public class ExampleController {
 
         logger.debug("Request got");
         return Response.status(201)
-                .entity(name)
+                .entity(new Entity(name))
                 .build();
     }
 }
