@@ -21,7 +21,6 @@ public class ExampleController {
     }
 
     @GET
-    @Path("/")
     public Response indexEndpoint(
     ) {
         logger.debug("Request got");
@@ -31,19 +30,19 @@ public class ExampleController {
     }
 
     @GET
-    @Path("{name}")
+    @Path("/{name}")
     public Response exampleEndpoint(
             @PathParam("name") String name
     ) {
 
         logger.debug("Request got");
-        return Response.status(200)
+        return Response.status(201)
                 .entity(new Entity(name))
                 .build();
     }
 
     @GET
-    @Path("resource/{name}")
+    @Path("/resource/{name}")
     public Response exampleSecondEndpoint(
             @PathParam("name") String name
     ) {
