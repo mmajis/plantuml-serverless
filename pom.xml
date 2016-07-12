@@ -4,9 +4,9 @@
     <groupId>org.lambadaframework</groupId>
     <artifactId>boilerplate</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <properties>
-        <lambada.version>0.0.5</lambada.version>
+        <lambada.version>0.0.6</lambada.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <deployment.bucket>lambada-boilerplate-test</deployment.bucket>
         <deployment.package>org.lambadaframework.example</deployment.package>
