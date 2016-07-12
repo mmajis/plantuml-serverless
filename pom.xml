@@ -8,7 +8,7 @@
     <properties>
         <lambada.version>0.0.6</lambada.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <deployment.bucket>lambada-boilerplate</deployment.bucket>
+        <deployment.bucket>lambada-boilerplate-test</deployment.bucket>
         <deployment.package>org.lambadaframework.example</deployment.package>
         <!-- Region to deploy-->
         <deployment.region>eu-west-1</deployment.region>
