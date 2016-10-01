@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.lambadaframework</groupId>
-    <artifactId>boilerplate</artifactId>
+    <groupId>fi.nitor</groupId>
+    <artifactId>plantuml-serverless</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.6</version>
+    <version>0.0.1</version>
     <properties>
         <lambada.version>0.0.6</lambada.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <deployment.bucket>lambada-boilerplate-test</deployment.bucket>
-        <deployment.package>org.lambadaframework.example</deployment.package>
+        <deployment.bucket>plantuml-serverless</deployment.bucket>
+        <deployment.package>fi.nitor.plantuml.lambda</deployment.package>
         <!-- Region to deploy-->
         <deployment.region>eu-west-1</deployment.region>
         <!-- Stage to deploy -->
-        <deployment.stage>production</deployment.stage>
+        <deployment.stage>development</deployment.stage>
         <!-- Maximum execution time for lambda -->
         <deployment.maximumExecutionTime>10</deployment.maximumExecutionTime>
         <!-- Maximum allowed memory usage for lambda -->
@@ -29,6 +29,12 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-log4j</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.plantuml/plantuml -->
+        <dependency>
+            <groupId>net.sourceforge.plantuml</groupId>
+            <artifactId>plantuml</artifactId>
+            <version>8048</version>
         </dependency>
     </dependencies>
     <build>
@@ -103,4 +109,30 @@
             <url>s3://${deployment.bucket}/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>!prod</value>
+                </property>
+            </activation>
+            <properties>
+                <deployment.stage>development</deployment.stage>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <properties>
+                <deployment.stage>production</deployment.stage>
+            </properties>
+        </profile>
+    </profiles>
 </project>
