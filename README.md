@@ -15,3 +15,4 @@ Issues:
 to return binary data. Otherwise it returns the data base64 encoded. Currently this sort of works by setting `*/*` as a binary MIME type and 
 returning a response with `Content-Type: */*` but this is obviously not good to do. `*/*` works because browsers make requests where `*/*` is in the Accept header.
     - Need API Gateway to support raw binary responses without requiring the client to request correct MIME type.
+    - Or switch to use non proxy Lambda integration
