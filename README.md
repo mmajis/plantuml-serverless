@@ -1,9 +1,13 @@
-## Almost rendering PlantUML diagrams with AWS Lambda
+## Rendering PlantUML diagrams with AWS Lambda
 
-This is a test to see how the [Lambada framework](https://github.com/lambadaframework/lambadaframework) works for API
-development using AWS API Gateway & Lambda.
+Serverless Framework 1.4.0 project to render [PlantUML](http://plantuml.com) diagrams with an AWS API Gateway + Lambda
+function backend in such a way that the URLs could be used directly in HTML IMG tags, for example.
 
-The idea was to create a serverless [PlantUML](http://plantuml.com) diagram rendering server, but it turns out that AWS API Gateway does not
-support binary responses at this time. Also Lambada doesn't support configuring CORS headers...
+This is work in progress, only a simple proof of concept for now.
 
-Oh well.
+Issues:
+- Serverless does not support specifying binary response MIME types for API Gateway. So this has to be done manually after serverless deployment.
+- API Gateway Lambda Proxy integration needs the request to contain a specific MIME type in the Accept header in order
+to return binary data. Otherwise it returns the data base64 encoded. Currently this sort of works by setting `*/*` as a binary MIME type and 
+returning a response with `Content-Type: */*` but this is obviously not good to do. `*/*` works because browsers make requests where `*/*` is in the Accept header.
+

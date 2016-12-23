@@ -1,138 +1,72 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>fi.nitor</groupId>
-    <artifactId>plantuml-serverless</artifactId>
-    <packaging>jar</packaging>
-    <version>0.0.1</version>
-    <properties>
-        <lambada.version>0.0.6</lambada.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <deployment.bucket>plantuml-serverless</deployment.bucket>
-        <deployment.package>fi.nitor.plantuml.lambda</deployment.package>
-        <!-- Region to deploy-->
-        <deployment.region>eu-west-1</deployment.region>
-        <!-- Stage to deploy -->
-        <deployment.stage>development</deployment.stage>
-        <!-- Maximum execution time for lambda -->
-        <deployment.maximumExecutionTime>10</deployment.maximumExecutionTime>
-        <!-- Maximum allowed memory usage for lambda -->
-        <deployment.lambdaMemorySize>1024</deployment.lambdaMemorySize>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.lambadaframework</groupId>
-            <artifactId>runtime</artifactId>
-            <version>${lambada.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-log4j</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/net.sourceforge.plantuml/plantuml -->
-        <dependency>
-            <groupId>net.sourceforge.plantuml</groupId>
-            <artifactId>plantuml</artifactId>
-            <version>8048</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.lambadaframework</groupId>
-                <artifactId>lambada-maven-plugin</artifactId>
-                <version>${lambada.version}</version>
-                <configuration>
-                    <packageName>${deployment.package}</packageName>
-                    <regionToDeploy>${deployment.region}</regionToDeploy>
-                    <stageToDeploy>${deployment.stage}</stageToDeploy>
-                    <lambdaMaximumExecutionTime>${deployment.maximumExecutionTime}</lambdaMaximumExecutionTime>
-                    <lambdaMemorySize>${deployment.lambdaMemorySize}</lambdaMemorySize>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare</goal>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--
-            Maven Shade plugin packages the project to a fat JAR with all required dependencies.
-            With minimum dependencies it should create a 5 MB jar file.
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <configuration>
-                    <!-- It is important to NOT to activate minimizeJar option -->
-                    <minimizeJar>false</minimizeJar>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-        <extensions>
-            <extension>
-                <groupId>org.lambadaframework</groupId>
-                <artifactId>wagon</artifactId>
-                <version>${lambada.version}</version>
-            </extension>
-        </extensions>
-    </build>
-    <distributionManagement>
-        <repository>
-            <id>aws-releases</id>
-            <name>AWS Release Repository</name>
-            <url>s3://${deployment.bucket}/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>aws-snapshots</id>
-            <name>AWS Snapshot Repository</name>
-            <url>s3://${deployment.bucket}/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>!prod</value>
-                </property>
-            </activation>
-            <properties>
-                <deployment.stage>development</deployment.stage>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>prod</value>
-                </property>
-            </activation>
-            <properties>
-                <deployment.stage>production</deployment.stage>
-            </properties>
-        </profile>
-    </profiles>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.nitor</groupId>
+  <artifactId>plantuml-serverless</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1</version>
+  <name>PlantUML Serverless API</name>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-core</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-events</artifactId>
+      <version>1.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-lambda-java-log4j</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/net.sourceforge.plantuml/plantuml -->
+    <dependency>
+        <groupId>net.sourceforge.plantuml</groupId>
+        <artifactId>plantuml</artifactId>
+        <version>8048</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-frontend-jaxrs -->
+    <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+        <version>3.1.9</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>

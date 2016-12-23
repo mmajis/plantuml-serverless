@@ -1,0 +1,26 @@
+service: plantuml-serverless
+
+frameworkVersion: "=1.4.0"
+
+provider:
+  name: aws
+  runtime: java8
+  region: eu-west-1
+  stage: dev
+  profile: core
+  cfLogs: true
+  environment:
+    stage: ${opt:stage, self:provider.stage}
+
+package:
+  artifact: target/plantuml-serverless-0.0.1.jar
+
+functions:
+  png:
+    handler: com.nitor.plantuml.lambda.png.PngHandler
+    events:
+      - http:
+          path: png/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true
