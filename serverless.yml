@@ -24,6 +24,14 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+  img:
+    handler: com.nitor.plantuml.lambda.PngHandler
+    events:
+      - http:
+          path: img/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true
   svg:
     handler: com.nitor.plantuml.lambda.SvgHandler
     events:
