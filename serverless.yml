@@ -48,3 +48,11 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+  map:
+    handler: com.nitor.plantuml.lambda.MapHandler
+    events:
+      - http:
+          path: map/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true
