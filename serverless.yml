@@ -17,10 +17,18 @@ package:
 
 functions:
   png:
-    handler: com.nitor.plantuml.lambda.png.PngHandler
+    handler: com.nitor.plantuml.lambda.PngHandler
     events:
       - http:
           path: png/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true
+  svg:
+    handler: com.nitor.plantuml.lambda.SvgHandler
+    events:
+      - http:
+          path: svg/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
