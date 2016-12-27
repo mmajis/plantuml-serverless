@@ -19,3 +19,6 @@ atlassian-ide-plugin.xml
 aws
 target
 *reduced-pom.xml
+
+#macOS
+.DS_Store
