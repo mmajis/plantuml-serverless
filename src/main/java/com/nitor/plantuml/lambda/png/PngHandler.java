@@ -50,7 +50,7 @@ public class PngHandler implements RequestStreamHandler {
       }
       JSONObject headerJson = new JSONObject();
       headerJson.put("Access-Control-Allow-Origin", "*");
-      headerJson.put("Content-Type", "*/*"); //This is dirty but works as long as browser does content type sniffing...
+      headerJson.put("Content-Type", "image/png"); //This is dirty but works as long as browser does content type sniffing...
 
       ByteArrayOutputStream baos = handleUml(encodedUml);
       byte[] bytes = baos.toByteArray();
