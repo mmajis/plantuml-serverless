@@ -32,3 +32,11 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+  txt:
+    handler: com.nitor.plantuml.lambda.TxtHandler
+    events:
+      - http:
+          path: txt/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true

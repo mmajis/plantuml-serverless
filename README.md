@@ -15,6 +15,10 @@ This is work in progress, only a simple proof of concept for now.
 
 ![Rendered SVG diagram should be here](https://393sqs3x53.execute-api.eu-west-1.amazonaws.com/plantuml/svg/Kt8goYylJYrIKj2rKr1o3F1KS4yiIIrFh5IoKWZ8ALOeIirBIIrIACd8B5Oeo4dCAodDpU52KGVMw9EOcvIIgE1McfTSafcVfwI0JpU6Of09C6czhCGYlDgnwBVHrSKq80YiEJL58IKpCRqeCHVDrM0zM9oDgGqUGc0jg464hXe0)
 
+####TXT Diagram
+
+https://393sqs3x53.execute-api.eu-west-1.amazonaws.com/plantuml/txt/Kt8goYylJYrIKj2rKr1o3F1KS4yiIIrFh5IoKWZ8ALOeIirBIIrIACd8B5Oeo4dCAodDpU52KGVMw9EOcvIIgE1McfTSafcVfwI0JpU6Of09C6czhCGYlDgnwBVHrSKq80YiEJL58IKpCRqeCHVDrM0zM9oDgGqUGc0jg464hXe0
+
 ### Issues
 - Serverless does not support specifying binary response MIME types for API Gateway. So this has to be done manually after serverless deployment.
     - Set `*/*` as binary type.
