@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>PNG Sequence Diagram</h3>
+<img src="https://8z289sk8l1.execute-api.eu-west-1.amazonaws.com/dev/png/Kt8goYylJYrIKj2rKr1o3F1KS4yiIIrFh5IoKWZ8ALOeIirBIIrIACd8B5Oeo4dCAodDpU52KGVMw9EOcvIIgE1McfTSafcVfwI0JpU6Of09C6czhCGYlDgnwBVHrSKq80YiEJL58IKpCRqeCHVDrM0zM9oDgGqUGc0jg464hXe0">
+<h3>SVG Component Diagram</h3>
+<img src="http://8z289sk8l1.execute-api.eu-west-1.amazonaws.com/dev/png/LOvD3e8m44RtFSM40x1sGKYC9iG44pOUO2XLIygqAGM2fxS_gBXfEr_Vp3ok1wD9a8FifAI_Cy0HU7mo_liyDXUeq8a5rqYWaOzb3zGuj1t2VIBkfAOnKYg5HT7ZZ8Uot3Sq2idThdK4JIYcGMqez6Z_wSgYUSxo1MUT53ljF4pev2oWbOHszHqicKEUbvjYF6ETPDZc59BFLlPT7r8_-Gq0">
+<h3>TXT Class Diagram</h3>
+<pre id="txtClassDiagramContent"></pre>
+<link id="txtimport" rel="import" href="https://8z289sk8l1.execute-api.eu-west-1.amazonaws.com/dev/txt/LOq_ImGn4CNxV8eXrLsXi1usLmY2d8s5bOrOZCcxtE0akoIpnI9-TtVFzSJcyVZn_hGFAGDNpjHiKinQ9TYOrPqaWf07coWZlwEs_yXEVMnEaL0Y1HH3TVUH1qEaO-qp7IID5THTtz8pLnDMYcYIYWlAhL4KJilnwnFNpENDBKC_UslYGG8UEOC-NHHqj9y95dlpPtUh7PIdpTPzNQfBwyW1BwmZvf0KSmbs-4MRxGfhhtfkNkvyv-dgZlpEdtVsvCb_0m00">
+<script type="text/javascript">
+    var link = document.querySelector('link[id="txtimport"]');
+    var content = link.import;
+    var pre = document.querySelector('#txtClassDiagramContent');
+    pre.innerHTML = content.body.textContent;
+</script>
+</body>
+<h3>Image map</h3>
+<img id="mapimg" usemap="#plantuml_map" src="https://8z289sk8l1.execute-api.eu-west-1.amazonaws.com/dev/png/AqWiAibCpYn8p2jHSCfFKeYEpYWfAR3IroylBzSho04Ab-Rcw2NdvyR6Se7aTUqK77CoarCLh11AuSgAyqkBabFJyelIK_NoKajYOnKoKdDoyW40">
+<link id="mapimport" rel="import" href="https://8z289sk8l1.execute-api.eu-west-1.amazonaws.com/dev/map/AqWiAibCpYn8p2jHSCfFKeYEpYWfAR3IroylBzSho04Ab-Rcw2NdvyR6Se7aTUqK77CoarCLh11AuSgAyqkBabFJyelIK_NoKajYOnKoKdDoyW40">
+<div id="mapContainer"></div>
+<script type="text/javascript">
+    var link = document.querySelector('link[id="mapimport"]');
+    var mapContent = link.import;
+    var elem = document.querySelector('#mapContainer');
+    elem.appendChild(mapContent.body);
+</script>
+</html>
