@@ -56,3 +56,11 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+  check:
+    handler: com.nitor.plantuml.lambda.SyntaxHandler
+    events:
+      - http:
+          path: check/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true

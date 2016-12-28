@@ -1,5 +1,6 @@
 package com.nitor.plantuml.lambda;
 
+import com.nitor.plantuml.lambda.exception.StatusCodeException;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Base64;
 import java.util.Optional;
 
 class LambdaBase {
@@ -44,7 +46,7 @@ class LambdaBase {
   }
 
   @SuppressWarnings("unchecked")
-  void sendOKResponse(OutputStream outputStream, String base64Response, DiagramType diagramType) throws IOException {
+  void sendOKDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType) throws IOException {
     JSONObject responseJson = new JSONObject();
 
     JSONObject headerJson = new JSONObject();
@@ -60,10 +62,43 @@ class LambdaBase {
   }
 
   @SuppressWarnings("unchecked")
-  void sendErrorResponse(OutputStream outputStream, Exception e) throws IOException {
+  void sendErrorDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType, String statusCode) throws IOException {
     JSONObject responseJson = new JSONObject();
-    responseJson.put("statusCode", "400");
-    responseJson.put("exception", e);
+
+    JSONObject headerJson = new JSONObject();
+    headerJson.put("Access-Control-Allow-Origin", "*");
+    headerJson.put("Content-Type", diagramType.getMimeType());
+
+    responseJson.put("statusCode", statusCode);
+    responseJson.put("headers", headerJson);
+    responseJson.put("body", base64Response);
+    responseJson.put("isBase64Encoded", true);
+
+    sendResponse(outputStream, responseJson);
+  }
+
+  @SuppressWarnings("unchecked")
+  void sendOKJSONResponse(OutputStream outputStream, String base64Response) throws IOException {
+    sendResponse(outputStream, base64Response, String.valueOf(HttpStatus.SC_OK));
+  }
+
+  void sendExceptionResponse(OutputStream outputStream, StatusCodeException statusCodeException) throws IOException {
+    String base64Response = Base64.getEncoder().encodeToString(statusCodeException.getMessage().getBytes());
+    sendResponse(outputStream, base64Response, statusCodeException.getStatusCode());
+  }
+
+  void sendResponse(OutputStream outputStream, String base64Response, String statusCode) throws IOException {
+    JSONObject responseJson = new JSONObject();
+
+    JSONObject headerJson = new JSONObject();
+    headerJson.put("Access-Control-Allow-Origin", "*");
+    headerJson.put("Content-Type", "application/json");
+
+    responseJson.put("statusCode", statusCode);
+    responseJson.put("headers", headerJson);
+    responseJson.put("body", base64Response);
+    responseJson.put("isBase64Encoded", true);
+
     sendResponse(outputStream, responseJson);
   }
 
@@ -74,7 +109,7 @@ class LambdaBase {
     writer.close();
   }
 
-  String getEncodedUml(InputStream inputStream) throws IOException, IllegalArgumentException {
+  String getEncodedUml(InputStream inputStream) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     final JSONParser parser = new JSONParser();
 

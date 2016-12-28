@@ -3,6 +3,8 @@ package com.nitor.plantuml.lambda;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.nitor.plantuml.PlantUmlUtil;
+import com.nitor.plantuml.lambda.exception.StatusCodeException;
+import org.apache.http.HttpStatus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,9 +23,14 @@ public class SvgHandler extends LambdaBase implements RequestStreamHandler  {
       ByteArrayOutputStream baos = plantUmlUtil.renderDiagram(encodedUml, DiagramType.IMAGE_SVG_XML);
       byte[] bytes = baos.toByteArray();
       String base64Response = Base64.getEncoder().encodeToString(bytes);
-      sendOKResponse(outputStream, base64Response, DiagramType.IMAGE_SVG_XML);
-    } catch (Exception e) {
-      sendErrorResponse(outputStream, e);
+      SyntaxCheckResult syntaxCheckResult = plantUmlUtil.checkSyntax(encodedUml);
+      if (!syntaxCheckResult.isError()) {
+        sendOKDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_SVG_XML);
+      } else {
+        sendErrorDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_SVG_XML, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
+      }
+    } catch (StatusCodeException sce) {
+      sendExceptionResponse(outputStream, sce);
     }
   }
 
