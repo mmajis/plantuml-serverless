@@ -47,22 +47,11 @@ class LambdaBase {
 
   @SuppressWarnings("unchecked")
   void sendOKDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType) throws IOException {
-    JSONObject responseJson = new JSONObject();
-
-    JSONObject headerJson = new JSONObject();
-    headerJson.put("Access-Control-Allow-Origin", "*");
-    headerJson.put("Content-Type", diagramType.getMimeType());
-
-    responseJson.put("statusCode", String.valueOf(HttpStatus.SC_OK));
-    responseJson.put("headers", headerJson);
-    responseJson.put("body", base64Response);
-    responseJson.put("isBase64Encoded", true);
-
-    sendResponse(outputStream, responseJson);
+    sendDiagramResponse(outputStream, base64Response, diagramType, String.valueOf(HttpStatus.SC_OK));
   }
 
   @SuppressWarnings("unchecked")
-  void sendErrorDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType, String statusCode) throws IOException {
+  void sendDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType, String statusCode) throws IOException {
     JSONObject responseJson = new JSONObject();
 
     JSONObject headerJson = new JSONObject();
@@ -74,20 +63,20 @@ class LambdaBase {
     responseJson.put("body", base64Response);
     responseJson.put("isBase64Encoded", true);
 
-    sendResponse(outputStream, responseJson);
+    internalSendResponse(outputStream, responseJson);
   }
 
   @SuppressWarnings("unchecked")
   void sendOKJSONResponse(OutputStream outputStream, String base64Response) throws IOException {
-    sendResponse(outputStream, base64Response, String.valueOf(HttpStatus.SC_OK));
+    sendJSONResponse(outputStream, base64Response, String.valueOf(HttpStatus.SC_OK));
   }
 
   void sendExceptionResponse(OutputStream outputStream, StatusCodeException statusCodeException) throws IOException {
     String base64Response = Base64.getEncoder().encodeToString(statusCodeException.getMessage().getBytes());
-    sendResponse(outputStream, base64Response, statusCodeException.getStatusCode());
+    sendJSONResponse(outputStream, base64Response, statusCodeException.getStatusCode());
   }
 
-  void sendResponse(OutputStream outputStream, String base64Response, String statusCode) throws IOException {
+  void sendJSONResponse(OutputStream outputStream, String base64Response, String statusCode) throws IOException {
     JSONObject responseJson = new JSONObject();
 
     JSONObject headerJson = new JSONObject();
@@ -99,10 +88,10 @@ class LambdaBase {
     responseJson.put("body", base64Response);
     responseJson.put("isBase64Encoded", true);
 
-    sendResponse(outputStream, responseJson);
+    internalSendResponse(outputStream, responseJson);
   }
 
-  private void sendResponse(OutputStream outputStream, JSONObject responseJson) throws IOException {
+  private void internalSendResponse(OutputStream outputStream, JSONObject responseJson) throws IOException {
     logger.debug(responseJson.toJSONString());
     OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
     writer.write(responseJson.toJSONString());

@@ -27,7 +27,7 @@ public class PngHandler extends LambdaBase implements RequestStreamHandler  {
       if (!syntaxCheckResult.isError()) {
         sendOKDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_PNG);
       } else {
-        sendErrorDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_PNG, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
+        sendDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_PNG, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
       }
     } catch (StatusCodeException sce) {
       sendExceptionResponse(outputStream, sce);

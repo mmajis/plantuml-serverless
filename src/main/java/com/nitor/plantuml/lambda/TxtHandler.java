@@ -27,7 +27,7 @@ public class TxtHandler extends LambdaBase implements RequestStreamHandler  {
       if (!syntaxCheckResult.isError()) {
         sendOKDiagramResponse(outputStream, base64Response, DiagramType.TEXT_PLAIN);
       } else {
-        sendErrorDiagramResponse(outputStream, base64Response, DiagramType.TEXT_PLAIN, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
+        sendDiagramResponse(outputStream, base64Response, DiagramType.TEXT_PLAIN, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
       }
     } catch (StatusCodeException sce) {
       sendExceptionResponse(outputStream, sce);

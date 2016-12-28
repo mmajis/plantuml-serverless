@@ -28,7 +28,7 @@ public class SyntaxHandler extends LambdaBase implements RequestStreamHandler  {
       if (!syntaxCheckResult.isError()) {
         sendOKJSONResponse(outputStream, base64Response);
       } else {
-        sendResponse(outputStream, base64Response, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
+        sendJSONResponse(outputStream, base64Response, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
       }
     } catch (StatusCodeException sce) {
       sendExceptionResponse(outputStream, sce);
