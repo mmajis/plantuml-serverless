@@ -32,7 +32,7 @@
     <dependency>
         <groupId>net.sourceforge.plantuml</groupId>
         <artifactId>plantuml</artifactId>
-        <version>8048</version>
+        <version>8053</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-frontend-jaxrs -->
     <dependency>
