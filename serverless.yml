@@ -1,6 +1,6 @@
 service: plantuml-serverless
 
-frameworkVersion: "=1.4.0"
+frameworkVersion: ">=1.4.0 <2.0.0"
 
 provider:
   name: aws
