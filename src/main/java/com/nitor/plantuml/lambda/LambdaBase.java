@@ -8,8 +8,11 @@ import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.awt.*;
 import java.io.*;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Base64;
 import java.util.Optional;
@@ -19,7 +22,7 @@ class LambdaBase {
   private static final String ENV_VAR_KEY_STAGE = "stage";
   private static final String DEFAULT_STAGE = "dev";
   private static final String GRAPHVIZ_DOT = "GRAPHVIZ_DOT";
-  private static final String LAMBDA_TASK_ROOT = "LAMBDA_TASK_ROOT";
+  static final String LAMBDA_TASK_ROOT = "LAMBDA_TASK_ROOT";
   private static final String DOT_PATH = "/tmp/dot_static";
 
   private static final Logger logger = Logger.getLogger(LambdaBase.class);
@@ -43,6 +46,32 @@ class LambdaBase {
       }
     }
     logger.debug(String.format("GRAPHVIZ_DOT system property: %s", System.getProperty(GRAPHVIZ_DOT)));
+
+    registerFonts();
+  }
+
+  public static void registerFonts() {
+    if (System.getenv(LAMBDA_TASK_ROOT) == null) {
+      logger.error(String.format("No LAMBDA_TASK_ROOT env variable so skipping extra font stuff"));
+      return;
+    }
+    try {
+      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+      Files.list(FileSystems.getDefault().getPath(System.getenv(LAMBDA_TASK_ROOT)))
+          .filter(path -> path.endsWith(".otf") || path.endsWith(".ttf"))
+          .forEach(path -> {
+            try {
+              ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, path.toFile()));
+              logger.debug(String.format("Registered font %s", path.toString()));
+            } catch (FontFormatException e) {
+              e.printStackTrace();
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @SuppressWarnings("unchecked")
