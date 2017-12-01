@@ -50,40 +50,11 @@ public class PngHandler extends LambdaBase implements RequestStreamHandler  {
   }
 
   private ByteArrayOutputStream applyBackground(ByteArrayOutputStream diagramImage) {
-    URL url = null;
-    try {
-      url = new URL("http://styleguide.nitor.com/assets/plantuml/nitorstyle.plantuml");
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    }
-    InputStream is = null;
-    try {
-      is = url.openStream();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    try {
-      BufferedReader in = new BufferedReader(new InputStreamReader(is));
-      String inputLine;
-
-      while ((inputLine = in.readLine()) != null) {
-        System.out.println(inputLine);
-      }
-      in.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        is.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
     byte[] originalDiagramBytes = diagramImage.toByteArray();
     try {
       if (!Files.exists(Paths.get(System.getenv(LAMBDA_TASK_ROOT), "bg.png"))) {
         logger.error("Background image not found!");
-        return diagramImage;
+        return bytesToByteArrayOutputStream(originalDiagramBytes);
       }
       Path pathToTmp = Paths.get("/tmp");
       Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rwx------");
@@ -93,6 +64,7 @@ public class PngHandler extends LambdaBase implements RequestStreamHandler  {
       Path tempBackgroundFile = Files.createTempFile(Paths.get("/tmp"), null, null);
       Path bgFile = Paths.get(System.getenv(LAMBDA_TASK_ROOT), "bg.png");
       Path script = Paths.get(System.getenv(LAMBDA_TASK_ROOT), "bg.sh");
+
       Process p = new ProcessBuilder("/bin/sh", "-x", script.toString(), diagramImageFile.toString(),
           bgFile.toString(), tempBackgroundFile.toString(), diagramWithBackgroundFile.toString())
           .redirectOutput(ProcessBuilder.Redirect.INHERIT)
@@ -111,9 +83,14 @@ public class PngHandler extends LambdaBase implements RequestStreamHandler  {
     }
 
     logger.error(String.format("Problem with background apply"));
+
+    return bytesToByteArrayOutputStream(originalDiagramBytes);
+  }
+
+  private ByteArrayOutputStream bytesToByteArrayOutputStream(byte[] bytes) {
     ByteArrayOutputStream originalImageData = new ByteArrayOutputStream();
     try {
-      originalImageData.write(originalDiagramBytes);
+      originalImageData.write(bytes);
     } catch (IOException e) {
       e.printStackTrace();
     }
