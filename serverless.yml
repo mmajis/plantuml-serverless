@@ -9,6 +9,7 @@ provider:
   stage: dev
   profile: core
   cfLogs: true
+  timeout: 30
   environment:
     stage: ${self:custom.stage}
 
