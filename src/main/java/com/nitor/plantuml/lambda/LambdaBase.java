@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Base64;
 import java.util.Optional;
@@ -39,7 +40,7 @@ class LambdaBase {
       String taskRootDotPath = String.format("%s/dot_static", System.getenv(LAMBDA_TASK_ROOT));
       try {
         File dotFile = new File(DOT_PATH);
-        Files.copy(new File(taskRootDotPath).toPath(), dotFile.toPath());
+        Files.copy(new File(taskRootDotPath).toPath(), dotFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         Files.setPosixFilePermissions(dotFile.toPath(), PosixFilePermissions.fromString("rwxr-xr-x"));
         System.setProperty(GRAPHVIZ_DOT, DOT_PATH);
       } catch (IOException e) {
@@ -56,7 +57,6 @@ class LambdaBase {
       logger.error(String.format("No LAMBDA_TASK_ROOT env variable so skipping extra font stuff"));
       return;
     }
-    int fontCount = 0;
     try {
       GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
@@ -78,7 +78,6 @@ class LambdaBase {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    logger.debug(String.format("Registered %s fonts", fontCount));
   }
 
   @SuppressWarnings("unchecked")
