@@ -10,7 +10,22 @@ provider:
   profile: core
   cfLogs: true
   environment:
-    stage: ${opt:stage, self:provider.stage}
+    stage: ${self:custom.stage}
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  domains:
+    plantuml: plantuml.nitorio.us
+    dev: plantuml-dev.nitorio.us
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    certificateName: plantuml-dev.nitorio.us
+    basePath: ''
+    stage: "${self:custom.stage}"
+    createRoute53Record: true
 
 package:
   artifact: target/plantuml-serverless-0.0.1.jar
