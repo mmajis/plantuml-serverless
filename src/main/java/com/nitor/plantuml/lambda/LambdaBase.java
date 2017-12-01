@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.io.*;
@@ -55,10 +56,15 @@ class LambdaBase {
       logger.error(String.format("No LAMBDA_TASK_ROOT env variable so skipping extra font stuff"));
       return;
     }
+    int fontCount = 0;
     try {
       GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
       Files.list(FileSystems.getDefault().getPath(System.getenv(LAMBDA_TASK_ROOT)))
-          .filter(path -> path.endsWith(".otf") || path.endsWith(".ttf"))
+          .forEach(path -> logger.debug(String.format("File: %s", path)));
+
+      Files.list(FileSystems.getDefault().getPath(System.getenv(LAMBDA_TASK_ROOT)))
+          .filter(path -> path.toString().endsWith(".otf") || path.toString().endsWith(".ttf"))
           .forEach(path -> {
             try {
               ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, path.toFile()));
@@ -72,6 +78,7 @@ class LambdaBase {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    logger.debug(String.format("Registered %s fonts", fontCount));
   }
 
   @SuppressWarnings("unchecked")
@@ -127,23 +134,32 @@ class LambdaBase {
     writer.close();
   }
 
-  String getEncodedUml(InputStream inputStream) throws IOException {
+  String getEncodedUml(JSONObject event) throws IOException {
+    if (event.get("pathParameters") != null) {
+      JSONObject pps = (JSONObject) event.get("pathParameters");
+      if (pps.get("encodedUml") == null) {
+        handleInputError(null);
+      }
+      return (String) pps.get("encodedUml");
+    }
+    return null;
+  }
+
+  boolean isNitorStyle(JSONObject event) {
+    JSONObject qsp;
+    if ((event == null) || (qsp = (JSONObject) event.get("queryStringParameters")) == null) {
+      return false;
+    }
+    return qsp.get("nitorStyle") != null;
+  }
+
+  JSONObject parseEvent(InputStream inputStream) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     final JSONParser parser = new JSONParser();
-
     try {
       JSONObject event = (JSONObject) parser.parse(reader);
       logger.debug(event.toJSONString());
-      if (event.get("pathParameters") != null) {
-        logger.debug(((JSONObject) event.get("pathParameters")).toJSONString());
-        JSONObject pps = (JSONObject) event.get("pathParameters");
-        if (pps.get("encodedUml") == null) {
-          handleInputError(null);
-        }
-        return (String) pps.get("encodedUml");
-      } else {
-        handleInputError(null);
-      }
+      return event;
     } catch (Exception e) {
       handleInputError(e);
     }

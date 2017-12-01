@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.nitor.plantuml.PlantUmlUtil;
 import com.nitor.plantuml.lambda.exception.StatusCodeException;
 import org.apache.http.HttpStatus;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,8 @@ public class SyntaxHandler extends LambdaBase implements RequestStreamHandler  {
   @Override
   public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
     try {
-      String encodedUml = getEncodedUml(inputStream);
+      JSONObject event = parseEvent(inputStream);
+      String encodedUml = getEncodedUml(event);
       SyntaxCheckResult syntaxCheckResult = plantUmlUtil.checkSyntax(encodedUml);
       Gson gson = new GsonBuilder().create();
       String json = gson.toJson(syntaxCheckResult);

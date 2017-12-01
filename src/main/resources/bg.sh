@@ -1,10 +1,13 @@
 #!/bin/bash
 
+echo "Grid background script starting"
+
 diagram=$1
-background=$2
-output=$3
+tile=$2
+background=$3
+output=$4
 dim=$(identify -format "%[fx:w]x%[fx:h]" $diagram)
 
-composite -tile grid.png -size $dim xc:none png:- | convert - -negate $background
+composite -tile $tile -size $dim xc:none png:- | convert - -negate $background
 
 convert $background $diagram -flatten $output

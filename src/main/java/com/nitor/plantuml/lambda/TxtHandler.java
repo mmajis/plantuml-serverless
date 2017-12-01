@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.nitor.plantuml.PlantUmlUtil;
 import com.nitor.plantuml.lambda.exception.StatusCodeException;
 import org.apache.http.HttpStatus;
+import org.json.simple.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +19,8 @@ public class TxtHandler extends LambdaBase implements RequestStreamHandler  {
 
   @Override
   public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
-    String encodedUml = getEncodedUml(inputStream);
+    JSONObject event = parseEvent(inputStream);
+    String encodedUml = getEncodedUml(event);
     try {
       ByteArrayOutputStream baos = plantUmlUtil.renderDiagram(encodedUml, DiagramType.TEXT_PLAIN);
       byte[] bytes = baos.toByteArray();

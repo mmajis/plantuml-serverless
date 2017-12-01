@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.nitor.plantuml.PlantUmlUtil;
 import com.nitor.plantuml.lambda.exception.StatusCodeException;
 import org.apache.http.HttpStatus;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,8 @@ public class MapHandler extends LambdaBase implements RequestStreamHandler  {
 
   @Override
   public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
-    String encodedUml = getEncodedUml(inputStream);
+    JSONObject event = parseEvent(inputStream);
+    String encodedUml = getEncodedUml(event);
     try {
       String imageMap = plantUmlUtil.renderImageMap(encodedUml);
       String base64Response = Base64.getEncoder().encodeToString(imageMap.getBytes());
