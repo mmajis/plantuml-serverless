@@ -9,6 +9,85 @@ Globals:
     MemorySize: 512
 
 Resources:
+  PlantUMLAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: plantuml
+      DefinitionBody:
+          swagger: 2.0
+          info:
+            title:
+              Ref: AWS::StackName
+          paths:
+            "/png/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PngFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
+                  contentHandling: CONVERT_TO_BINARY
+            "/img/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ImgFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
+                  contentHandling: CONVERT_TO_BINARY
+            "/svg/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SvgFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
+                  contentHandling: CONVERT_TO_BINARY
+            "/txt/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${TxtFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
+                  contentHandling: CONVERT_TO_BINARY
+            "/map/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MapFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
+                  contentHandling: CONVERT_TO_BINARY
+            "/check/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SyntaxFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
+                  contentHandling: CONVERT_TO_BINARY
+          x-amazon-apigateway-binary-media-types:
+            - "*/*"
+
   PngFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -22,6 +101,7 @@ Resources:
           Properties:
             Path: /png/{encodedUml}
             Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   ImgFunction:
     Type: AWS::Serverless::Function
@@ -35,6 +115,7 @@ Resources:
           Properties:
             Path: /img/{encodedUml}
             Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   SvgFunction:
     Type: AWS::Serverless::Function
@@ -48,6 +129,7 @@ Resources:
           Properties:
             Path: /svg/{encodedUml}
             Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   TxtFunction:
     Type: AWS::Serverless::Function
@@ -61,6 +143,7 @@ Resources:
           Properties:
             Path: /txt/{encodedUml}
             Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   MapFunction:
     Type: AWS::Serverless::Function
@@ -74,6 +157,7 @@ Resources:
           Properties:
             Path: /map/{encodedUml}
             Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   SyntaxFunction:
     Type: AWS::Serverless::Function
@@ -87,3 +171,12 @@ Resources:
           Properties:
             Path: /check/{encodedUml}
             Method: get
+            RestApiId: !Ref PlantUMLAPI
+
+Outputs:
+  ApiUrl:
+    Description: URL of your API endpoint
+    Value: !Sub "https://${PlantUMLAPI}.execute-api.${AWS::Region}.amazonaws.com/plantuml"
+  ExampleDiagram:
+    Description: Example URL to render a PlantUML diagram
+    Value: !Sub "https://${PlantUMLAPI}.execute-api.${AWS::Region}.amazonaws.com/plantuml/png/SyfFKj2rKt3CoKnELR1Io4ZDoSa70000"

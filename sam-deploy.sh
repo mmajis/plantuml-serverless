@@ -1,7 +1,7 @@
 #!/bin/bash
 
 aws cloudformation package \
---s3-bucket plantuml-serverless-dev-serverlessdeploymentbucke-1etumhykwyac9 \
+--s3-bucket plantuml-serverlessrepo \
 --output-template-file target/serverless-output.yaml \
 --template-file /Users/mika/code/plantuml-serverless/sam-template.yml
 
