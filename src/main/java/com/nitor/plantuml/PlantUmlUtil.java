@@ -7,6 +7,7 @@ import com.nitor.plantuml.lambda.SyntaxCheckResult;
 import com.nitor.plantuml.lambda.exception.BadRequestException;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.LineLocation;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.servlet.utility.UmlExtractor;
 import net.sourceforge.plantuml.syntax.SyntaxChecker;
@@ -48,8 +49,13 @@ public class PlantUmlUtil {
       logger.debug(json);
     }
     String diagramType = syntaxResult.getUmlDiagramType() != null ? syntaxResult.getUmlDiagramType().name() : DIAGRAM_TYPE_UNKNOWN;
+    LineLocation lineLoc = syntaxResult.getLineLocation();
+    int lineLocationPos = -1;
+    if (lineLoc != null) {
+      lineLocationPos = lineLoc.getPosition();
+    }
     SyntaxCheckResult result = new SyntaxCheckResult(syntaxResult.isError(), diagramType,
-        String.valueOf(syntaxResult.getErrorLinePosition()), new ArrayList(syntaxResult.getErrors()), syntaxResult.getSuggest());
+        String.valueOf(lineLocationPos), new ArrayList(syntaxResult.getErrors()), syntaxResult.getSuggest());
     return result;
   }
 
