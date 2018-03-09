@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: PlantUML Serverless API
+
+Globals:
+  Function:
+    Runtime: java8
+    Timeout: 20
+    MemorySize: 512
+
+Resources:
+  PngFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.PngHandler::handleRequest
+      CodeUri: !Ref paramCodeUri
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.2.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: png/{proxy+}
+            Method: get
+
+  ImgFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.PngHandler::handleRequest
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.2.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: img/{proxy+}
+            Method: get
+
+  SvgFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.SvgHandler::handleRequest
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.2.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: svg/{proxy+}
+            Method: get
+
+  TxtFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.TxtHandler::handleRequest
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.2.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: txt/{proxy+}
+            Method: get
+
+  MapFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.MapHandler::handleRequest
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.2.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: map/{proxy+}
+            Method: get
+
+  SyntaxFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.SyntaxHandler::handleRequest
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.2.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: check/{proxy+}
+            Method: get
