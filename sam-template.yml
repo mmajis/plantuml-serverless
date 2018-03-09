@@ -14,7 +14,6 @@ Resources:
     Properties:
       Handler: com.nitor.plantuml.lambda.PngHandler::handleRequest
       CodeUri: !Ref paramCodeUri
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 20
       CodeUri: target/plantuml-serverless-0.0.2.jar
       Events:
@@ -28,7 +27,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.nitor.plantuml.lambda.PngHandler::handleRequest
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 20
       CodeUri: target/plantuml-serverless-0.0.2.jar
       Events:
@@ -42,7 +40,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.nitor.plantuml.lambda.SvgHandler::handleRequest
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 20
       CodeUri: target/plantuml-serverless-0.0.2.jar
       Events:
@@ -56,7 +53,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.nitor.plantuml.lambda.TxtHandler::handleRequest
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 20
       CodeUri: target/plantuml-serverless-0.0.2.jar
       Events:
@@ -70,7 +66,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.nitor.plantuml.lambda.MapHandler::handleRequest
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 20
       CodeUri: target/plantuml-serverless-0.0.2.jar
       Events:
@@ -84,7 +79,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.nitor.plantuml.lambda.SyntaxHandler::handleRequest
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 20
       CodeUri: target/plantuml-serverless-0.0.2.jar
       Events:
