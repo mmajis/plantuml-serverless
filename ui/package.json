@@ -1,0 +1,23 @@
+{
+  "name": "plantuml-previewer",
+  "version": "1.0.0",
+  "description": "Online Plant UML editor with syntax highlighting and preview.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmajis/plantuml-previewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmajis/plantuml-previewer/issues"
+  },
+  "homepage": "https://github.com/mmajis/plantuml-previewer#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "html-minifier": "^3.5.12"
+  }
+}
