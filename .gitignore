@@ -25,3 +25,6 @@ target
 
 node_modules
 bin
+
+#UI
+ui/dist
