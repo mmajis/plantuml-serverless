@@ -19,6 +19,16 @@ Resources:
             title:
               Ref: AWS::StackName
           paths:
+            "/":
+              get: 
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UIFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy                
             "/png/{encodedUml}":
               get:
                 x-amazon-apigateway-integration:
@@ -87,6 +97,20 @@ Resources:
                   contentHandling: CONVERT_TO_BINARY
           x-amazon-apigateway-binary-media-types:
             - "*/*"
+  UIFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.nitor.plantuml.lambda.UIHandler::handleRequest
+      CodeUri: !Ref paramCodeUri
+      Timeout: 20
+      CodeUri: target/plantuml-serverless-0.0.4-SNAPSHOT.jar
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   PngFunction:
     Type: AWS::Serverless::Function
