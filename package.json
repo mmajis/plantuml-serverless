@@ -1,0 +1,31 @@
+{
+  "name": "plantuml-serverless",
+  "version": "0.0.5-SNAPSHOT",
+  "description": "Render PlantUML diagrams",
+  "main": "index.js",
+  "dependencies": {
+    "serverless": "^1.26.1"
+  },
+  "devDependencies": {
+    "serverless-apigw-binary": "^0.4.4",
+    "serverless-apigwy-binary": "^0.1.0",
+    "serverless-domain-manager": "^1.1.25"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmajis/plantuml-serverless.git"
+  },
+  "keywords": [
+    "plantuml",
+    "serverless"
+  ],
+  "author": "Mika Majakorpi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mmajis/plantuml-serverless/issues"
+  },
+  "homepage": "https://github.com/mmajis/plantuml-serverless#readme"
+}

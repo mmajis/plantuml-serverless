@@ -15,6 +15,8 @@ provider:
 
 plugins:
   - serverless-domain-manager
+  - serverless-apigw-binary
+  - serverless-apigwy-binary
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -27,11 +29,22 @@ custom:
     basePath: ''
     stage: "${self:custom.stage}"
     createRoute53Record: true
+  apigwBinary:
+    types:
+      - '*/*'
 
 package:
   artifact: target/plantuml-serverless-0.0.5-SNAPSHOT.jar
 
 functions:
+  ui:
+    handler: com.nitor.plantuml.lambda.UIHandler
+    events:
+      - http:
+          path: /
+          method: get
+          integration: lambda-proxy
+          cors: true
   png:
     handler: com.nitor.plantuml.lambda.PngHandler
     events:
@@ -48,6 +61,7 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          contentHandling: CONVERT_TO_BINARY
   svg:
     handler: com.nitor.plantuml.lambda.SvgHandler
     events:
@@ -56,6 +70,7 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          contentHandling: CONVERT_TO_BINARY
   txt:
     handler: com.nitor.plantuml.lambda.TxtHandler
     events:
@@ -64,6 +79,7 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          contentHandling: CONVERT_TO_BINARY
   map:
     handler: com.nitor.plantuml.lambda.MapHandler
     events:
@@ -72,6 +88,7 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          contentHandling: CONVERT_TO_BINARY
   check:
     handler: com.nitor.plantuml.lambda.SyntaxHandler
     events:
@@ -80,3 +97,4 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          contentHandling: CONVERT_TO_BINARY
