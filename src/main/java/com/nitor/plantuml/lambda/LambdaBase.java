@@ -126,6 +126,35 @@ class LambdaBase {
     internalSendResponse(outputStream, responseJson);
   }
 
+  void sendHTMLResponse(OutputStream outputStream, String htmlResponse, String statusCode) throws IOException {
+    JSONObject responseJson = new JSONObject();
+
+    JSONObject headerJson = new JSONObject();
+    headerJson.put("Access-Control-Allow-Origin", "*");
+    headerJson.put("Content-Type", "text/html");
+
+    responseJson.put("statusCode", statusCode);
+    responseJson.put("headers", headerJson);
+    responseJson.put("body", htmlResponse);
+    responseJson.put("isBase64Encoded", false);
+
+    internalSendResponse(outputStream, responseJson);
+  }
+
+  void sendRedirectResponse(OutputStream outputStream, String redirectPath) throws IOException {
+    JSONObject responseJson = new JSONObject();
+
+    JSONObject headerJson = new JSONObject();
+    headerJson.put("Access-Control-Allow-Origin", "*");
+    headerJson.put("Location", redirectPath);
+
+    responseJson.put("statusCode", HttpStatus.SC_MOVED_PERMANENTLY);
+    responseJson.put("headers", headerJson);
+    responseJson.put("isBase64Encoded", false);
+
+    internalSendResponse(outputStream, responseJson);
+  }
+
   private void internalSendResponse(OutputStream outputStream, JSONObject responseJson) throws IOException {
     logger.debug(responseJson.toJSONString());
     OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
