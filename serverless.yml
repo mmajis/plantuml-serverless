@@ -29,7 +29,7 @@ custom:
     createRoute53Record: true
 
 package:
-  artifact: target/plantuml-serverless-0.0.4.jar
+  artifact: target/plantuml-serverless-0.0.5-SNAPSHOT.jar
 
 functions:
   png:
