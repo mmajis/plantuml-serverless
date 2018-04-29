@@ -103,7 +103,7 @@ Resources:
       Handler: com.nitor.plantuml.lambda.UIHandler::handleRequest
       CodeUri: !Ref paramCodeUri
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api
@@ -118,7 +118,7 @@ Resources:
       Handler: com.nitor.plantuml.lambda.PngHandler::handleRequest
       CodeUri: !Ref paramCodeUri
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api
@@ -132,7 +132,7 @@ Resources:
     Properties:
       Handler: com.nitor.plantuml.lambda.PngHandler::handleRequest
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api
@@ -146,7 +146,7 @@ Resources:
     Properties:
       Handler: com.nitor.plantuml.lambda.SvgHandler::handleRequest
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api
@@ -160,7 +160,7 @@ Resources:
     Properties:
       Handler: com.nitor.plantuml.lambda.TxtHandler::handleRequest
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api
@@ -174,7 +174,7 @@ Resources:
     Properties:
       Handler: com.nitor.plantuml.lambda.MapHandler::handleRequest
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api
@@ -188,7 +188,7 @@ Resources:
     Properties:
       Handler: com.nitor.plantuml.lambda.SyntaxHandler::handleRequest
       Timeout: 20
-      CodeUri: target/plantuml-serverless-0.0.5.jar
+      CodeUri: target/plantuml-serverless-0.0.6-SNAPSHOT.jar
       Events:
         GetResource:
           Type: Api

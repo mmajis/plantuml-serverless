@@ -1,6 +1,6 @@
 {
   "name": "plantuml-serverless",
-  "version": "0.0.5",
+  "version": "0.0.6-SNAPSHOT",
   "description": "Render PlantUML diagrams",
   "main": "index.js",
   "dependencies": {
