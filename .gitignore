@@ -28,3 +28,11 @@ bin
 
 #UI
 ui/dist
+
+#dot
+dot/build
+
+.classpath
+.project
+.settings/
+
