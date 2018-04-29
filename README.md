@@ -5,7 +5,7 @@ A serverless UI + API to render [PlantUML](http://plantuml.com) diagrams.
 ## Drop in replacement for official PlantUML server
 
 This can be used as a drop in replacement for scenarios
-where http://www.plantuml.com/plantuml is used a a rendering endpoint. You can avoid sending the diagram source to a server outisde your control and use an encrypted HTTPS endpoint for the diagram traffic.
+where http://www.plantuml.com/plantuml is used a a rendering endpoint. You can avoid sending the diagram source to a server outside your control and use an encrypted HTTPS endpoint for the diagram traffic.
 
 This doesn't support everything the official PlantUML server does but should be good for most intents and purposes (PNG, SVG and TXT rendering).
 
