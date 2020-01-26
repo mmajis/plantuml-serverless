@@ -6,12 +6,12 @@
 # to the Lambda runtime environment.
 
 mkdir build
-curl http://pkgs.fedoraproject.org/repo/pkgs/graphviz/graphviz-2.38.0.tar.gz/5b6a829b2ac94efcd5fa3c223ed6d3ae/graphviz-2.38.0.tar.gz -o build/graphviz-2.38.0.tar.gz
-tar zxvf graphviz-2.38.0.tar.gz -C build
-docker run -v $(pwd)/build/graphviz-2.38.0:/dot amazonlinux:2017.03 \
+curl https://www2.graphviz.org/Packages/stable/portable_source/graphviz-2.42.3.tar.gz -o build/graphviz-2.42.3.tar.gz
+tar zxvf build/graphviz-2.42.3.tar.gz -C build
+docker run -v $(pwd)/build/graphviz-2.42.3:/dot amazonlinux:2.0.20191217.0 \
 bash -c "yum groupinstall -y 'Development Tools' ;\
 yum install -y expat-devel ;\
 cd /dot ;\
 ./configure --enable-static=yes --with-expat=yes ;\
 make"
-cp build/graphviz-2.38.0/cmd/dot/dot_static ../src/main/resources
+cp build/graphviz-2.42.3/cmd/dot/dot_static ../src/main/resources
