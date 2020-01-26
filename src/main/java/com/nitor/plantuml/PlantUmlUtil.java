@@ -55,7 +55,7 @@ public class PlantUmlUtil {
       lineLocationPos = lineLoc.getPosition();
     }
     SyntaxCheckResult result = new SyntaxCheckResult(syntaxResult.isError(), diagramType,
-        String.valueOf(lineLocationPos), new ArrayList(syntaxResult.getErrors()), syntaxResult.getSuggest());
+        String.valueOf(lineLocationPos), new ArrayList<String>(syntaxResult.getErrors()));
     return result;
   }
 
@@ -67,7 +67,7 @@ public class PlantUmlUtil {
       return decodedUml;
     } catch (IllegalArgumentException iae) {
       SyntaxCheckResult result = new SyntaxCheckResult(true, DIAGRAM_TYPE_UNKNOWN, "0",
-          Arrays.asList(String.format("Could not decode UML from request path: %s", encodedUml)), Collections.emptyList());
+          Arrays.asList(String.format("Could not decode UML from request path: %s", encodedUml)));
       Gson gson = new GsonBuilder().create();
       String json = gson.toJson(result);
       throw new BadRequestException(json, iae);

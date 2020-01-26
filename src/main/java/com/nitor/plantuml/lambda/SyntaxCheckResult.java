@@ -8,13 +8,11 @@ public class SyntaxCheckResult {
   private final List<String> errors;
   private final String diagramType;
   private final String errorLocation;
-  private final List<String> suggestions;
 
-  public SyntaxCheckResult(boolean isError, String diagramType, String errorLocation, List<String> errors, List<String> suggestions) {
+  public SyntaxCheckResult(boolean isError, String diagramType, String errorLocation, List<String> errors) {
     this.isError = isError;
     this.diagramType = diagramType;
     this.errorLocation = errorLocation;
-    this.suggestions = suggestions;
     this.errors = errors;
   }
 
@@ -32,9 +30,5 @@ public class SyntaxCheckResult {
 
   public String getErrorLocation() {
     return errorLocation;
-  }
-
-  public List<String> getSuggestions() {
-    return suggestions;
   }
 }
