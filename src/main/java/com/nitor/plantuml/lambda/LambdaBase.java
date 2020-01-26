@@ -80,7 +80,6 @@ class LambdaBase {
     }
   }
 
-  @SuppressWarnings("unchecked")
   void sendOKDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType) throws IOException {
     sendDiagramResponse(outputStream, base64Response, diagramType, String.valueOf(HttpStatus.SC_OK));
   }
