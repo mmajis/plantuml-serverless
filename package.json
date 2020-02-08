@@ -4,12 +4,12 @@
   "description": "Render PlantUML diagrams",
   "main": "index.js",
   "dependencies": {
-    "serverless": "^1.26.1"
+    "serverless": "^1.61.3"
   },
   "devDependencies": {
     "serverless-apigw-binary": "^0.4.4",
     "serverless-apigwy-binary": "^0.1.0",
-    "serverless-domain-manager": "^1.1.25"
+    "serverless-domain-manager": "^3.3.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
