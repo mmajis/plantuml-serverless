@@ -5,7 +5,7 @@
   <groupId>com.nitor</groupId>
   <artifactId>plantuml-serverless</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.6</version>
+  <version>0.0.7-SNAPSHOT</version>
   <name>PlantUML Serverless API</name>
 
   <properties>

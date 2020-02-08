@@ -34,7 +34,7 @@ custom:
       - '*/*'
 
 package:
-  artifact: target/plantuml-serverless-0.0.6.jar
+  artifact: target/plantuml-serverless-0.0.7-SNAPSHOT.jar
 
 functions:
   ui:
