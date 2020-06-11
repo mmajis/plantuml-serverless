@@ -12,6 +12,10 @@ import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.servlet.utility.UmlExtractor;
 import net.sourceforge.plantuml.syntax.SyntaxChecker;
 import net.sourceforge.plantuml.syntax.SyntaxResult;
+import net.sourceforge.plantuml.BlockUml;
+import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.core.Diagram;
+import net.sourceforge.plantuml.error.PSystemError;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +33,12 @@ public class PlantUmlUtil {
     String uml = decodeUml(encodedUml);
     SourceStringReader reader = new SourceStringReader(uml);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    reader.generateImage(baos, new FileFormatOption(DiagramTypeUtil.asFileFormat(diagramType), true));
+    final BlockUml blockUml = reader.getBlocks().get(0);
+    final Diagram diagram = blockUml.getDiagram();
+    if (diagram instanceof PSystemError) {
+      return null;
+    }
+    diagram.exportDiagram(baos, 0, new FileFormatOption(DiagramTypeUtil.asFileFormat(diagramType), true));
     return baos;
   }
 

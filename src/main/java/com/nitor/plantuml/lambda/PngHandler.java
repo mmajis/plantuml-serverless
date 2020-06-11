@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.nitor.plantuml.PlantUmlUtil;
 import com.nitor.plantuml.lambda.exception.StatusCodeException;
+import com.nitor.plantuml.lambda.exception.BadRequestException;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -33,17 +34,17 @@ public class PngHandler extends LambdaBase implements RequestStreamHandler  {
     String encodedUml = getEncodedUml(event);
     try {
       ByteArrayOutputStream baos = plantUmlUtil.renderDiagram(encodedUml, DiagramType.IMAGE_PNG);
+
+      if (baos == null) {
+        sendExceptionResponse(outputStream, new BadRequestException("Cannot generate the diagram"));
+        return;
+      }
       if (isNitorStyle(event)) {
         baos = applyBackground(baos);
       }
       byte[] bytes = baos.toByteArray();
       String base64Response = Base64.getEncoder().encodeToString(bytes);
-      SyntaxCheckResult syntaxCheckResult = plantUmlUtil.checkSyntax(encodedUml);
-      if (!syntaxCheckResult.isError()) {
-        sendOKDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_PNG);
-      } else {
-        sendDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_PNG, String.valueOf(HttpStatus.SC_UNPROCESSABLE_ENTITY));
-      }
+      sendOKDiagramResponse(outputStream, base64Response, DiagramType.IMAGE_PNG);
     } catch (StatusCodeException sce) {
       sendExceptionResponse(outputStream, sce);
     }
