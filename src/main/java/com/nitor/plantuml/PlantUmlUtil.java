@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 
 public class PlantUmlUtil {
 
@@ -29,7 +30,7 @@ public class PlantUmlUtil {
     String uml = decodeUml(encodedUml);
     SourceStringReader reader = new SourceStringReader(uml);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    reader.generateImage(baos, new FileFormatOption(DiagramTypeUtil.asFileFormat(diagramType), true));
+    reader.outputImage(baos, new FileFormatOption(DiagramTypeUtil.asFileFormat(diagramType), true));
     return baos;
   }
 
@@ -37,7 +38,7 @@ public class PlantUmlUtil {
     String uml = decodeUml(encodedUml);
     SourceStringReader reader = new SourceStringReader(uml);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    return reader.generateImage(baos, new FileFormatOption(FileFormat.PNG, true));
+    return reader.outputImage(baos, new FileFormatOption(FileFormat.PNG, true)).getDescription();
   }
 
   public SyntaxCheckResult checkSyntax(String encodedUml) throws IOException {
@@ -59,9 +60,13 @@ public class PlantUmlUtil {
     return result;
   }
 
-  private String decodeUml(String encodedUml) {
+  public String decodeUml(String encodedUml) {
     logger.debug(String.format("Got encoded uml: %s", encodedUml));
     try {
+      if (encodedUml.length() > 4 && Arrays.asList(".png", ".svg", ".txt")
+              .contains(encodedUml.substring(encodedUml.length() - 5).toLowerCase(Locale.ROOT))) {
+        encodedUml = encodedUml.substring(0, encodedUml.length() - 4);
+      }
       String decodedUml = UmlExtractor.getUmlSource(encodedUml);
       logger.debug(String.format("Decoded uml: %s", decodedUml));
       return decodedUml;

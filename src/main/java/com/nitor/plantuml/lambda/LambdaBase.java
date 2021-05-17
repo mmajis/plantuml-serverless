@@ -26,6 +26,7 @@ class LambdaBase {
   private static final String GRAPHVIZ_DOT = "GRAPHVIZ_DOT";
   static final String LAMBDA_TASK_ROOT = "LAMBDA_TASK_ROOT";
   private static final String DOT_PATH = "/tmp/dot_static";
+  private static final String MAX_AGE = "max-age=86400";
 
   private static final Logger logger = Logger.getLogger(LambdaBase.class);
 
@@ -91,6 +92,7 @@ class LambdaBase {
     JSONObject headerJson = new JSONObject();
     headerJson.put("Access-Control-Allow-Origin", "*");
     headerJson.put("Content-Type", diagramType.getMimeType());
+    headerJson.put("Cache-Control", MAX_AGE);
 
     responseJson.put("statusCode", statusCode);
     responseJson.put("headers", headerJson);
@@ -116,6 +118,7 @@ class LambdaBase {
     JSONObject headerJson = new JSONObject();
     headerJson.put("Access-Control-Allow-Origin", "*");
     headerJson.put("Content-Type", "application/json");
+    headerJson.put("Cache-Control", MAX_AGE);
 
     responseJson.put("statusCode", statusCode);
     responseJson.put("headers", headerJson);
@@ -131,6 +134,7 @@ class LambdaBase {
     JSONObject headerJson = new JSONObject();
     headerJson.put("Access-Control-Allow-Origin", "*");
     headerJson.put("Content-Type", "text/html");
+    headerJson.put("Cache-Control", MAX_AGE);
 
     responseJson.put("statusCode", statusCode);
     responseJson.put("headers", headerJson);

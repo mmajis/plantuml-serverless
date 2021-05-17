@@ -45,6 +45,14 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+  uml:
+    handler: com.nitor.plantuml.lambda.UmlHandler
+    events:
+      - http:
+          path: uml/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true
   png:
     handler: com.nitor.plantuml.lambda.PngHandler
     events:
