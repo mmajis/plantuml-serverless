@@ -12,6 +12,7 @@ import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.servlet.utility.UmlExtractor;
 import net.sourceforge.plantuml.syntax.SyntaxChecker;
 import net.sourceforge.plantuml.syntax.SyntaxResult;
+import org.apache.cxf.common.util.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
@@ -63,9 +64,11 @@ public class PlantUmlUtil {
   public String decodeUml(String encodedUml) {
     logger.debug(String.format("Got encoded uml: %s", encodedUml));
     try {
-      if (encodedUml.length() > 4 && Arrays.asList(".png", ".svg", ".txt")
-              .contains(encodedUml.substring(encodedUml.length() - 5).toLowerCase(Locale.ROOT))) {
-        encodedUml = encodedUml.substring(0, encodedUml.length() - 4);
+      if (encodedUml.length() > 10) {
+          int period = encodedUml.indexOf('.');
+          if (period > encodedUml.length() - 10) {
+            encodedUml = encodedUml.substring(0, period);
+          }
       }
       String decodedUml = UmlExtractor.getUmlSource(encodedUml);
       logger.debug(String.format("Decoded uml: %s", decodedUml));
