@@ -9,35 +9,59 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.LineLocation;
 import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.StringLocated;
+import net.sourceforge.plantuml.code.AsciiEncoder;
 import net.sourceforge.plantuml.servlet.utility.UmlExtractor;
 import net.sourceforge.plantuml.syntax.SyntaxChecker;
 import net.sourceforge.plantuml.syntax.SyntaxResult;
-import org.apache.cxf.common.util.StringUtils;
+import net.sourceforge.plantuml.tim.TLineType;
+import net.sourceforge.plantuml.version.Version;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class PlantUmlUtil {
 
   private static final Logger logger = Logger.getLogger(PlantUmlUtil.class);
   public static final String DIAGRAM_TYPE_UNKNOWN = "UNKNOWN";
+  public static final String NOETAG = "NOETAG";
 
-  public ByteArrayOutputStream renderDiagram(String encodedUml, DiagramType diagramType) throws IOException {
+  public SourceStringReader readDiagram(String encodedUml) {
     String uml = decodeUml(encodedUml);
-    SourceStringReader reader = new SourceStringReader(uml);
+    return new SourceStringReader(uml);
+  }
+
+  public String getEtag(String encodedUml, String typeIdentifier) {
+    String uml = decodeUml(encodedUml);
+    if (Pattern.compile("!include(_many|_once)?\\s*https?://").matcher(uml).find()) {
+      return NOETAG;
+    }
+    String baseEtag = typeIdentifier + Version.etag();
+    try {
+      final AsciiEncoder coder = new AsciiEncoder();
+      final MessageDigest msgDigest = MessageDigest.getInstance("MD5");
+      msgDigest.update(uml.getBytes(StandardCharsets.UTF_8));
+      final byte[] digest = msgDigest.digest();
+      return baseEtag + coder.encode(digest);
+    } catch (Exception e) {
+      logger.error("failed to digest uml", e);
+      return NOETAG;
+    }
+  }
+
+  public ByteArrayOutputStream renderDiagram(SourceStringReader reader, DiagramType diagramType) throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     reader.outputImage(baos, new FileFormatOption(DiagramTypeUtil.asFileFormat(diagramType), true));
     return baos;
   }
 
-  public String renderImageMap(String encodedUml) throws IOException {
-    String uml = decodeUml(encodedUml);
-    SourceStringReader reader = new SourceStringReader(uml);
+  public String renderImageMap(SourceStringReader reader) throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     return reader.outputImage(baos, new FileFormatOption(FileFormat.PNG, true)).getDescription();
   }

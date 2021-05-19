@@ -21,6 +21,7 @@ public class UIHandler extends LambdaBase implements RequestStreamHandler  {
     logger.debug("Path: " + path);
     if (path != null && !path.endsWith("/")) {
       sendRedirectResponse(outputStream, path + "/");
+      return;
     }
 
     InputStream content = this.getClass().getResourceAsStream(CONTENT_CLASSPATH);

@@ -11,6 +11,7 @@
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <plantuml.version>1.2021.6</plantuml.version>
   </properties>
 
   <dependencies>
@@ -33,7 +34,7 @@
     <dependency>
       <groupId>net.sourceforge.plantuml</groupId>
       <artifactId>plantuml</artifactId>
-      <version>1.2021.6</version>
+      <version>${plantuml.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-frontend-jaxrs -->
     <dependency>
