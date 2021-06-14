@@ -4,7 +4,7 @@
   "description": "Render PlantUML diagrams",
   "main": "index.js",
   "dependencies": {
-    "serverless": "^1.61.3"
+    "serverless": "^2.46.0"
   },
   "devDependencies": {
     "serverless-apigw-binary": "^0.4.4",

@@ -36,3 +36,5 @@ dot/build
 .project
 .settings/
 
+.vscode/
+.sts4-cache/

@@ -1,17 +1,25 @@
 service: plantuml-serverless
 
-frameworkVersion: ">=1.4.0 <2.0.0"
+frameworkVersion: ">=2.46.0 <3.0.0"
 
 provider:
   name: aws
-  runtime: java8
+  runtime: java11
   region: eu-west-1
   stage: dev
   profile: core
-  cfLogs: true
   timeout: 30
+  logRetentionInDays: 30
+  lambdaHashingVersion: 20201221
   environment:
     stage: ${self:custom.stage}
+  ecr:
+    # In this section you can define images that will be built locally and uploaded to ECR
+    scanOnPush: true
+    images:
+      lambdacontainer:
+        path: ./
+        file: lambdacontainer/Dockerfile
 
 plugins:
   - serverless-domain-manager
@@ -38,63 +46,79 @@ package:
 
 functions:
   ui:
-    handler: com.nitor.plantuml.lambda.UIHandler
     events:
       - http:
           path: /
           method: get
           integration: lambda-proxy
           cors: true
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.UIHandler::handleRequest
   png:
-    handler: com.nitor.plantuml.lambda.PngHandler
     events:
       - http:
           path: png/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.PngHandler::handleRequest
   img:
-    handler: com.nitor.plantuml.lambda.PngHandler
     events:
       - http:
           path: img/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.PngHandler::handleRequest
   svg:
-    handler: com.nitor.plantuml.lambda.SvgHandler
     events:
       - http:
           path: svg/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.SvgHandler::handleRequest
   txt:
-    handler: com.nitor.plantuml.lambda.TxtHandler
     events:
       - http:
           path: txt/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.TxtHandler::handleRequest
   map:
-    handler: com.nitor.plantuml.lambda.MapHandler
     events:
       - http:
           path: map/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.MapHandler::handleRequest
   check:
-    handler: com.nitor.plantuml.lambda.SyntaxHandler
     events:
       - http:
           path: check/{encodedUml}
           method: get
           integration: lambda-proxy
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.SyntaxHandler::handleRequest

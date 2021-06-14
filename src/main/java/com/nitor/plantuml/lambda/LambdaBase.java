@@ -18,6 +18,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.Properties;
 
 class LambdaBase {
 
@@ -25,7 +26,9 @@ class LambdaBase {
   private static final String DEFAULT_STAGE = "dev";
   private static final String GRAPHVIZ_DOT = "GRAPHVIZ_DOT";
   static final String LAMBDA_TASK_ROOT = "LAMBDA_TASK_ROOT";
-  private static final String DOT_PATH = "/tmp/dot_static";
+  private static final String DOT_PATH = "/opt/dot_static";
+  private static final File LOCAL_FONT_CONFIG = new File(
+          System.getenv(LAMBDA_TASK_ROOT) + "/fontconfig.properties");
 
   private static final Logger logger = Logger.getLogger(LambdaBase.class);
 
@@ -37,47 +40,10 @@ class LambdaBase {
     if (System.getenv(LAMBDA_TASK_ROOT) == null) {
       logger.error(String.format("%s environment variable is not set. Rendering without graphviz dot!", LAMBDA_TASK_ROOT));
     } else {
-      String taskRootDotPath = String.format("%s/dot_static", System.getenv(LAMBDA_TASK_ROOT));
-      try {
-        File dotFile = new File(DOT_PATH);
-        Files.copy(new File(taskRootDotPath).toPath(), dotFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        Files.setPosixFilePermissions(dotFile.toPath(), PosixFilePermissions.fromString("rwxr-xr-x"));
         System.setProperty(GRAPHVIZ_DOT, DOT_PATH);
-      } catch (IOException e) {
-        logger.error(String.format("Failed to copy graphviz dot executable to %s. Rendering without graphviz dot!", DOT_PATH), e);
-      }
     }
     logger.debug(String.format("GRAPHVIZ_DOT system property: %s", System.getProperty(GRAPHVIZ_DOT)));
-
-    registerFonts();
-  }
-
-  public static void registerFonts() {
-    if (System.getenv(LAMBDA_TASK_ROOT) == null) {
-      logger.error(String.format("No LAMBDA_TASK_ROOT env variable so skipping extra font stuff"));
-      return;
-    }
-    try {
-      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-      Files.list(FileSystems.getDefault().getPath(System.getenv(LAMBDA_TASK_ROOT)))
-          .forEach(path -> logger.debug(String.format("File: %s", path)));
-
-      Files.list(FileSystems.getDefault().getPath(System.getenv(LAMBDA_TASK_ROOT)))
-          .filter(path -> path.toString().endsWith(".otf") || path.toString().endsWith(".ttf"))
-          .forEach(path -> {
-            try {
-              ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, path.toFile()));
-              logger.debug(String.format("Registered font %s", path.toString()));
-            } catch (FontFormatException e) {
-              e.printStackTrace();
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          });
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    logger.debug(String.format("sun.awt.fontconfig=%s", System.getProperty("sun.awt.fontconfig")));
   }
 
   void sendOKDiagramResponse(OutputStream outputStream, String base64Response, DiagramType diagramType) throws IOException {
