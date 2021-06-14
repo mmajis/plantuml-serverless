@@ -38,3 +38,5 @@ dot/build
 
 .vscode/
 .sts4-cache/
+
+.aws-sam/
