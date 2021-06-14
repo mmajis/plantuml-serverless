@@ -42,6 +42,7 @@ https://plantuml.nitorio.us/txt/Kt8goYylJYrIKj2rKr1o3F1KS4yiIIrFh5IoKWZ8ALOeIirB
 
 ## Build
 
+- `npm ci`
 - `mvn clean package`
 
 ## Deploy
@@ -52,7 +53,7 @@ This used to be available on the AWS Serverless Application Repository, but curr
 doesn't appear to support lambda functions packaged as container images.
 
 ### Serverless framework:
-- `sls deploy`
+- `sls deploy` for dev stage or `sls deploy --stage plantuml` for production
 
 (Will have to remove or edit custom domains for this to work)
 
