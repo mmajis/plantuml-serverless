@@ -41,9 +41,6 @@ custom:
     types:
       - '*/*'
 
-package:
-  artifact: target/plantuml-serverless-0.0.7-SNAPSHOT.jar
-
 functions:
   ui:
     events:
