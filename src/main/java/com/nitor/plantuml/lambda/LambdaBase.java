@@ -57,6 +57,7 @@ class LambdaBase {
     JSONObject headerJson = new JSONObject();
     headerJson.put("Access-Control-Allow-Origin", "*");
     headerJson.put("Content-Type", diagramType.getMimeType());
+    headerJson.put("Cache-Control", "public, max-age=31536000"); //1 year max age
 
     responseJson.put("statusCode", statusCode);
     responseJson.put("headers", headerJson);
