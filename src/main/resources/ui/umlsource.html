@@ -1,0 +1,19 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Reveal UML Source</title>
+</head>
+<body>
+<script type="application/javascript">
+function openInEditor() {
+    var ls = window.localStorage;
+    var pre = document.querySelector('#uml-source');
+    var uml = pre.textContent;
+    ls && ls.setItem("uml", uml);
+    window.location.href=pre.dataset.editorUrl;
+}
+</script>
+<pre id="uml-source" data-editor-url="{{editor_url}}">{{uml_source}}</pre>
+<button onclick="openInEditor()">Open in Editor</button>
+</body>
+</html>

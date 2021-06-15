@@ -40,7 +40,17 @@ Resources:
                   uri:
                     Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UIFunction.Arn}/invocations"
                   httpMethod: POST
-                  type: aws_proxy                
+                  type: aws_proxy
+            "/uml/{encodedUml}":
+              get:
+                x-amazon-apigateway-integration:
+                  responses:
+                    default:
+                      statusCode: 200
+                  uri:
+                    Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UmlFunction.Arn}/invocations"
+                  httpMethod: POST
+                  type: aws_proxy
             "/png/{encodedUml}":
               get:
                 x-amazon-apigateway-integration:
@@ -127,6 +137,21 @@ Resources:
       DockerTag: lambdacontainer-sam
       DockerContext: ./
       Dockerfile: lambdacontainer/Dockerfile
+
+  UmlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 30
+      PackageType: Image
+      ImageConfig:
+        Command: [ "com.nitor.plantuml.lambda.UmlHandler::handleRequest" ]
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /uml/{encodedUml}
+            Method: get
+            RestApiId: !Ref PlantUMLAPI
 
   PngFunction:
     Type: AWS::Serverless::Function

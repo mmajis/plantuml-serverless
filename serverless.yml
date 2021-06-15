@@ -53,6 +53,17 @@ functions:
       name: lambdacontainer
       command:
         - com.nitor.plantuml.lambda.UIHandler::handleRequest
+  uml:
+    events:
+      - http:
+          path: uml/{encodedUml}
+          method: get
+          integration: lambda-proxy
+          cors: true
+    image:
+      name: lambdacontainer
+      command:
+        - com.nitor.plantuml.lambda.UmlHandler::handleRequest
   png:
     events:
       - http:
