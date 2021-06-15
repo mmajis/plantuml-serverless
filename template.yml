@@ -17,8 +17,8 @@ Metadata:
     ReadmeUrl: s3://plantuml-serverlessrepo/README.md
     Labels: ['plantuml']
     HomePageUrl: https://github.com/mmajis/plantuml-serverless
-    SemanticVersion: 0.1.0
-    SourceCodeUrl: https://github.com/mmajis/plantuml-serverless/releases/tag/v0.1.0
+    SemanticVersion: 0.1.1
+    SourceCodeUrl: https://github.com/mmajis/plantuml-serverless/releases/tag/v0.1.1
 
 Resources:
   PlantUMLAPI:
