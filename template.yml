@@ -152,6 +152,10 @@ Resources:
             Path: /uml/{encodedUml}
             Method: get
             RestApiId: !Ref PlantUMLAPI
+    Metadata:
+      DockerTag: lambdacontainer-sam
+      DockerContext: ./
+      Dockerfile: lambdacontainer/Dockerfile
 
   PngFunction:
     Type: AWS::Serverless::Function
