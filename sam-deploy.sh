@@ -2,8 +2,6 @@
 # Note! This needs an ECR repo created like this:
 # aws ecr create-repository --repository-name plantuml-sam \
 # --image-tag-mutability IMMUTABLE --image-scanning-configuration scanOnPush=true
-#
-# After repo creation, edit the script to replace the repo URL in the commands below
 
 set -eo pipefail
 readonly basedir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
