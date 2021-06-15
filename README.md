@@ -59,5 +59,4 @@ doesn't appear to support lambda functions packaged as container images.
 
 ### AWS SAM
 
-- Edit `sam-deploy.sh` to replace defaults with values from your environment
 - Run `sam-deploy.sh`
