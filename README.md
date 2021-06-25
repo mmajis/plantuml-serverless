@@ -53,10 +53,18 @@ This used to be available on the AWS Serverless Application Repository, but curr
 doesn't appear to support lambda functions packaged as container images.
 
 ### Serverless framework:
-- `sls deploy` for dev stage or `sls deploy --stage plantuml` for production
 
-(Will have to remove or edit custom domains for this to work)
+- Edit `serverless.yml` to replace `custom.domains.dev` and `custom.domains.prod` with your own domain names.
+    * If you don't want a custom domain name, remove or comment out the `serverless-domain-manager` plugin from the plugins list and skip
+      the `sls create-cert` and `sls create_domain` commands.
+- Run `sls create-cert` to create an ACM certificate for your domain as configured in `custom.customCertificate`.
+- Run `sls create_domain` to create an API Gateway custom domain as configured in `custom.customDomain`.
+- Run `sls deploy`.
+
+The above steps deploy the default `dev` stage. To deploy the `prod` stage, add `--stage prod` to each command.
 
 ### AWS SAM
 
 - Run `sam-deploy.sh`
+
+The SAM deployment doesn't include custom domains currently.

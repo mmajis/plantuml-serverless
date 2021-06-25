@@ -1,20 +1,18 @@
 service: plantuml-serverless
 
 frameworkVersion: ">=2.46.0 <3.0.0"
+variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  runtime: java11
   region: eu-west-1
   stage: dev
-  profile: core
   timeout: 30
   logRetentionInDays: 30
   lambdaHashingVersion: 20201221
   environment:
     stage: ${self:custom.stage}
   ecr:
-    # In this section you can define images that will be built locally and uploaded to ECR
     scanOnPush: true
     images:
       lambdacontainer:
@@ -22,6 +20,7 @@ provider:
         file: lambdacontainer/Dockerfile
 
 plugins:
+  - serverless-certificate-creator
   - serverless-domain-manager
   - serverless-apigw-binary
   - serverless-apigwy-binary
@@ -29,14 +28,22 @@ plugins:
 custom:
   stage: ${opt:stage, self:provider.stage}
   domains:
-    plantuml: plantuml.nitorio.us
+    prod: plantuml.nitorio.us
     dev: plantuml-dev.nitorio.us
+  customCertificate:
+    certificateName: ${self:custom.domains.${self:custom.stage}}
+    idempotencyToken: "plantumlserverless"
+    hostedZoneIds: "Z2N6543C2MYFH4"
+    region: us-east-1 # us-east-1 required for edge type CloudFront endpoint
+    # optional, default false. this is useful if you managed to delete your certificate but the dns validation records still exist
+    rewriteRecords: true
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
-    certificateName: plantuml-dev.nitorio.us
+    certificateName: ${self:custom.domains.${self:custom.stage}}
     basePath: ''
     stage: "${self:custom.stage}"
     createRoute53Record: true
+    endpointType: edge
   apigwBinary:
     types:
       - '*/*'
@@ -130,3 +137,6 @@ functions:
       name: lambdacontainer
       command:
         - com.nitor.plantuml.lambda.SyntaxHandler::handleRequest
+
+resources:
+  Description: PlantUML Serverless
