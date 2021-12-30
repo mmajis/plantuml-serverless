@@ -22,8 +22,6 @@ provider:
 plugins:
   - serverless-certificate-creator
   - serverless-domain-manager
-  - serverless-apigw-binary
-  - serverless-apigwy-binary
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -44,9 +42,6 @@ custom:
     stage: "${self:custom.stage}"
     createRoute53Record: true
     endpointType: edge
-  apigwBinary:
-    types:
-      - '*/*'
 
 functions:
   ui:
@@ -78,6 +73,8 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          response:
+            contentHandling: CONVERT_TO_BINARY
     image:
       name: lambdacontainer
       command:
@@ -89,6 +86,8 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          response:
+            contentHandling: CONVERT_TO_BINARY
     image:
       name: lambdacontainer
       command:
@@ -122,6 +121,8 @@ functions:
           method: get
           integration: lambda-proxy
           cors: true
+          response:
+            contentHandling: CONVERT_TO_BINARY
     image:
       name: lambdacontainer
       command:
